@@ -159,79 +159,87 @@ def main():
 	
 	st.info("text line")
 	"""okie""" 
-	activities = ["General EDA","EDA For Linear Models","Model Building for Classification Problem"]	
-	choice = st.sidebar.selectbox("Select Activities",activities)
 
+	st.subheader("Exploratory Data Analysis")
 
-	if choice == 'General EDA':
-		st.subheader("Exploratory Data Analysis")
+	data = st.file_uploader("Upload a Dataset", type=["csv"])
+	if data is not None:
+		df = load.read_csv(data)
+		
+		st.success("Data Frame Loaded successfully")
+		listy1 = ['Select','Show head vals','Show dtypes','Show Columns','Show Missing','column information','Show Selected Columns']
 
-		data = st.file_uploader("Upload a Dataset", type=["csv"])
-		if data is not None:
-			df = load.read_csv(data)
+		listy2=['Select','Aggregation Tabulation','Num Count Summary','Statistical Summary','Numerical Variables','Categorical Variables','DropNA','Missing after DropNA']
+		option1 = st.sidebar.selectbox('Understanding Data',listy1)
+		option2 = st.sidebar.selectbox('Analysis of data',listy2)
+
+		if option1==listy1[1]:
 			st.dataframe(df.head())
-			st.success("Data Frame Loaded successfully")
+
+		if option1==listy1[2]:
+			st.write(dataframe.show_dtypes(df))
+
+		if option1==listy1[3]:
+			st.write(dataframe.show_columns(df))
+
+		if option1==listy1[4]:
+			st.write(dataframe.Show_Missing(df))
+
+		if option1==listy1[5]:
+			st.write(info.Column_information(df))
+
+		if option1==listy1[6]:
+			selected_columns = st.multiselect("Select Columns",dataframe.show_columns(df))
+			new_df = df[selected_columns]
+			st.dataframe(new_df)
+
+		if option2==listy2[1]:
+			st.write(dataframe.Tabulation(df))
+
+		if option2==listy2[2]:
+			st.write(info.num_count_summary(df))
+
+		if option2==listy2[3]:
+			st.write(info.statistical_summary(df))	
+
+		if option2==listy2[4]:
+			num_df = dataframe.Numerical_variables(df)
+			numer_df=pd.DataFrame(num_df)                
+			st.dataframe(numer_df)
+
+		if option2==listy2[5]:
+			new_df = dataframe.categorical_variables(df)
+			catego_df=pd.DataFrame(new_df)                
+			st.dataframe(catego_df)
+
+		if option2==listy2[6]:
+			num_df = dataframe.Numerical_variables(df)
+			imp_df = dataframe.impute(num_df)
+			st.dataframe(imp_df)
+
+		if option2==listy2[7]:
+			num_df = dataframe.Numerical_variables(df)
+			imp_df = dataframe.impute(num_df)
+			st.write(dataframe.Show_Missing(imp_df))
+
+		listy3 = ['Select','Histogram','Bar graph','Box plot','Scatter plot','Dist plot','Frequency distribution']
+		option3 = st.sidebar.selectbox('Univariate Analysis',listy3)
+
+		listy4 = ['Select','Bivariate scattering','Heatmap','Multivariate']
+		option4 = st.sidebar.selectbox('Multivariate Analysis',listy4)
+
 			
-
-			if st.checkbox("Show dtypes"):
-				st.write(dataframe.show_dtypes(df))
-
-			if st.checkbox("Show Columns"):
-				st.write(dataframe.show_columns(df))
-
-			if st.checkbox("Show Missing"):
-				st.write(dataframe.Show_Missing(df))
-
-			if st.checkbox("column information"):
-				st.write(info.Column_information(df))
-
-			if st.checkbox("Aggregation Tabulation"):
-				st.write(dataframe.Tabulation(df))
-
-			if st.checkbox("Num Count Summary"):
-				st.write(info.num_count_summary(df))
-
-			if st.checkbox("Statistical Summary"):
-				st.write(info.statistical_summary(df))	
-
-			if st.checkbox("Show Selected Columns"):
-				selected_columns = st.multiselect("Select Columns",dataframe.show_columns(df))
-				new_df = df[selected_columns]
-				st.dataframe(new_df)
-
-			if st.checkbox("Numerical Variables"):
-				num_df = dataframe.Numerical_variables(df)
-				numer_df=pd.DataFrame(num_df)                
-				st.dataframe(numer_df)
-
-			if st.checkbox("Categorical Variables"):
-				new_df = dataframe.categorical_variables(df)
-				catego_df=pd.DataFrame(new_df)                
-				st.dataframe(catego_df)
-
-			if st.checkbox("DropNA"):
-				num_df = dataframe.Numerical_variables(df)
-				imp_df = dataframe.impute(num_df)
-				st.dataframe(imp_df)
-
-			if st.checkbox("Missing after DropNA"):
-				num_df = dataframe.Numerical_variables(df)
-				imp_df = dataframe.impute(num_df)
-				st.write(dataframe.Show_Missing(imp_df))
-
-			st.subheader("UNIVARIATE ANALYSIS")
-			
+		if option3==listy3[1]:
 			all_columns_names = dataframe.show_columns(df)         
 			selected_columns_names = st.selectbox("Select Column for Histogram ",all_columns_names)
-			if st.checkbox("Show Histogram for Selected variable"):
-				st.write(dataframe.show_hist(df[selected_columns_names]))
-				st.pyplot()
-
+			st.write(dataframe.show_hist(df[selected_columns_names]))
+			st.pyplot()
+			
+		if option3==listy3[5]:
 			all_columns_names = dataframe.show_columns(df)         
 			selected_columns_names = st.selectbox("Select Columns Distplot ",all_columns_names)
-			if st.checkbox("Show DisPlot for Selected variable"):
-				st.write(dataframe.Show_DisPlot(df[selected_columns_names]))
-				st.pyplot()
+			st.write(dataframe.Show_DisPlot(df[selected_columns_names]))
+			st.pyplot()
 
 			
 
