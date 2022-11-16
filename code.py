@@ -1,3 +1,7 @@
+# Meghana - CS20B1060
+# Madhav - CS20B1047
+# Web Application to perform Statistical Analysis, EDA & Data Visualisation
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -155,93 +159,108 @@ class Attribute_Information():
 
 	
 def main():
-	st.title("Machine Learning Application for Automated EDA")
+    
+	st.title("Summary Statistics, EDA & Data Visualisation")
 	
-	st.info("text line")
-	"""okie""" 
+	# st.info("Upload your csv file here ;)") 
 
 	st.subheader("Exploratory Data Analysis")
 
-	data = st.file_uploader("Upload a Dataset", type=["csv"])
-	if data is not None:
+	data = st.file_uploader("Upload your dataset here", type=["csv"])
+	
+	if data is not None :
+			
 		df = load.read_csv(data)
-		
-		st.success("Data Frame Loaded successfully")
-		listy1 = ['Select','Show head vals','Show dtypes','Show Columns','Show Missing','column information','Show Selected Columns']
+			
+		st.success("CSV File Loaded successfully")
 
-		listy2=['Select','Aggregation Tabulation','Num Count Summary','Statistical Summary','Numerical Variables','Categorical Variables','DropNA','Missing after DropNA']
+		listy1 = ['Select','Data Preview','Data Types','Columns','Number of missing values','Column Information','Show Selected Columns']
+
+		listy2=['Select','Aggregation Tabulation','Number Count Summary','Statistical Summary','Numerical Variables','Categorical Variables','DropNA']
 		option1 = st.sidebar.selectbox('Understanding Data',listy1)
 		option2 = st.sidebar.selectbox('Analysis of data',listy2)
 
 		if option1==listy1[1]:
+			st.subheader("Preview of your data : ")
 			st.dataframe(df.head())
 
 		if option1==listy1[2]:
+			st.subheader("Data Types : ")
 			st.write(dataframe.show_dtypes(df))
 
 		if option1==listy1[3]:
+			st.subheader("Columns in the dataset : ")
 			st.write(dataframe.show_columns(df))
 
 		if option1==listy1[4]:
+			st.subheader("Number of missing values : ")
 			st.write(dataframe.Show_Missing(df))
 
 		if option1==listy1[5]:
+			st.subheader("Column Information : ")
 			st.write(info.Column_information(df))
 
 		if option1==listy1[6]:
-			selected_columns = st.multiselect("Select Columns",dataframe.show_columns(df))
+			selected_columns = st.multiselect("Select Columns :",dataframe.show_columns(df))
+			st.subheader("Selected columns : ")   
 			new_df = df[selected_columns]
 			st.dataframe(new_df)
 
 		if option2==listy2[1]:
+			st.subheader("Aggregation Table : ")
 			st.write(dataframe.Tabulation(df))
 
 		if option2==listy2[2]:
+			st.subheader("Number Count Summary : ")
 			st.write(info.num_count_summary(df))
 
 		if option2==listy2[3]:
+			st.subheader("Statistical Analysis : ")
 			st.write(info.statistical_summary(df))	
 
 		if option2==listy2[4]:
+			st.subheader("Numerical Variables : ")
 			num_df = dataframe.Numerical_variables(df)
 			numer_df=pd.DataFrame(num_df)                
 			st.dataframe(numer_df)
 
 		if option2==listy2[5]:
+			st.subheader("Categorical Variables : ")
 			new_df = dataframe.categorical_variables(df)
 			catego_df=pd.DataFrame(new_df)                
 			st.dataframe(catego_df)
 
 		if option2==listy2[6]:
+			st.subheader("Drop NA : ")
 			num_df = dataframe.Numerical_variables(df)
 			imp_df = dataframe.impute(num_df)
 			st.dataframe(imp_df)
+			st.download_button(
+				label="Download data as CSV",
+				data=imp_df.to_csv(),
+				file_name='removed_Na.csv',
+				mime='text/csv',
+			)
 
-		if option2==listy2[7]:
-			num_df = dataframe.Numerical_variables(df)
-			imp_df = dataframe.impute(num_df)
-			st.write(dataframe.Show_Missing(imp_df))
-
-		listy3 = ['Select','Histogram','Bar graph','Box plot','Scatter plot','Dist plot','Frequency distribution']
+		listy3 = ['Select','Histogram','Bar graph','Box plot','Scatter plot','Dist plot','Frequency Distribution']
 		option3 = st.sidebar.selectbox('Univariate Analysis',listy3)
 
-		listy4 = ['Select','Bivariate scattering','Heatmap','Multivariate']
+		listy4 = ['Select','Bivariate Scattering','Heatmap','Multivariate']
 		option4 = st.sidebar.selectbox('Multivariate Analysis',listy4)
 
 			
 		if option3==listy3[1]:
 			all_columns_names = dataframe.show_columns(df)         
-			selected_columns_names = st.selectbox("Select Column for Histogram ",all_columns_names)
+			selected_columns_names = st.selectbox("Select Column for Histogram :",all_columns_names)
 			st.write(dataframe.show_hist(df[selected_columns_names]))
 			st.pyplot()
 			
 		if option3==listy3[5]:
 			all_columns_names = dataframe.show_columns(df)         
-			selected_columns_names = st.selectbox("Select Columns Distplot ",all_columns_names)
+			selected_columns_names = st.selectbox("Select Columns Distplot :",all_columns_names)
 			st.write(dataframe.Show_DisPlot(df[selected_columns_names]))
 			st.pyplot()
 
-			
 
 
 if __name__ == '__main__':
