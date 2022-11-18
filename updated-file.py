@@ -9,6 +9,20 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
+import time
+from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
+from htbuilder.units import percent, px
+from htbuilder.funcs import rgba, rgb
+
+st.set_page_config(
+    page_title="Summary Statistics, EDA & Data Visualisation",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'About': "# Our Data Science Project. A GUI to analyze and visualize your dataset."
+    }
+)
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -196,82 +210,88 @@ class Attribute_Information():
 	
 def main():
 	
-	st.sidebar.title("Summary Statistics, EDA & Data Visualisation")
+	st.title("Summary Statistics, EDA & Data Visualisation")
 	
 	# st.info("Upload your csv file here ;)") 
 
-	st.sidebar.subheader("Exploratory Data Analysis")
+	st.subheader("Exploratory Data Analysis")
 
-	data = st.sidebar.file_uploader("Upload your dataset here", type=["csv"])
+	data = st.file_uploader("Upload your dataset here", type=["csv"])
 	
 	if data is not None :
 			
 		df = load.read_csv(data)
+  
+		# my_bar = st.progress(0)
+
+		# for percent_complete in range(91):
+		# 	time.sleep(0.01)
+		# 	my_bar.progress(percent_complete + 10)
 			
-		st.success("CSV File Loaded successfully")
+		success_txt = st.success("CSV File Loaded successfully",icon="✅")
 
 		listy1 = ['Select','Data Preview','Data Types','Columns','Number of missing values','Column Information','Show Selected Columns']
 
 		listy2=['Select','Aggregation Tabulation','Number Count Summary','Statistical Summary','Numerical Variables','Categorical Variables','DropNA']
 		option1 = st.sidebar.selectbox('Understanding Data',listy1)
 		option2 = st.sidebar.selectbox('Analysis of data',listy2)
-
+  
 		if option1==listy1[1]:
 			st.subheader("Preview of your data : ")
-			st.dataframe(df.head())
+			st.dataframe(df.head() )
 
 		if option1==listy1[2]:
 			st.subheader("Data Types : ")
 			# Boolean to resize the dataframe, stored as a session state variable
-			st.write(dataframe.show_dtypes(df))
+			st.write(dataframe.show_dtypes(df) )
 
 		if option1==listy1[3]:
 			st.subheader("Columns in the dataset : ")
-			st.write(dataframe.show_columns(df))
+			st.write(dataframe.show_columns(df) )
 
 		if option1==listy1[4]:
 			st.subheader("Number of missing values : ")
-			st.write(dataframe.Show_Missing(df))
+			st.write(dataframe.Show_Missing(df) )
 
 		if option1==listy1[5]:
 			st.subheader("Column Information : ")
-			st.write(info.Column_information(df))
+			st.write(info.Column_information(df) )
 
 		if option1==listy1[6]:
 			selected_columns = st.multiselect("Select Columns :",dataframe.show_columns(df))
 			st.subheader("Selected columns : ")   
 			new_df = df[selected_columns]
-			st.dataframe(new_df)
+			st.dataframe(new_df )
 
 		if option2==listy2[1]:
 			st.subheader("Aggregation Table : ")
-			st.write(dataframe.Tabulation(df))
+			st.write(dataframe.Tabulation(df) )
 
 		if option2==listy2[2]:
 			st.subheader("Number Count Summary : ")
-			st.write(info.num_count_summary(df))
+			st.write(info.num_count_summary(df) )
 
 		if option2==listy2[3]:
 			st.subheader("Statistical Analysis : ")
-			st.write(info.statistical_summary(df))	
+			st.write(info.statistical_summary(df) )	
 
 		if option2==listy2[4]:
 			st.subheader("Numerical Variables : ")
 			num_df = dataframe.Numerical_variables(df)
 			numer_df=pd.DataFrame(num_df)                
-			st.dataframe(numer_df)
+			st.dataframe(numer_df )
 
 		if option2==listy2[5]:
 			st.subheader("Categorical Variables : ")
 			new_df = dataframe.categorical_variables(df)
 			catego_df=pd.DataFrame(new_df)                
-			st.dataframe(catego_df)
+			st.dataframe(catego_df )
 
 		if option2==listy2[6]:
 			st.subheader("Drop NA : ")
 			num_df = dataframe.Numerical_variables(df)
 			imp_df = dataframe.impute(num_df)
-			st.dataframe(imp_df)
+			st.dataframe(imp_df )
 			st.download_button(
 				label="Download data as CSV",
 				data=imp_df.to_csv(),
@@ -342,10 +362,82 @@ def main():
 		if option4==listy4[1]:
 			st.write(dataframe.show_heatmp(df.corr()))
 			st.pyplot()
+   
+		if(option1 != listy1[0] or option2 != listy2[0] or option3 != listy3[0] or option4 != listy4[0] or option5 != listy5[0]):
+			success_txt.empty()
+   
+		if(option1 != listy1[0]):
+			st.empty() 
+   
+		st.sidebar.download_button( 
+                             		label="Download Complete Report",
+									data=df.to_csv(),
+									file_name='CSV_Report.pdf',
+									mime='text/pdf'
+								  )
+
+# def layout(*args):
+
+#     style = """
+#     <style>
+#       # MainMenu {visibility: hidden;}
+#       footer {visibility: hidden;}
+#      .stApp { bottom: 30px; }
+#     </style>
+#     """
+
+#     style_div = styles(
+#         position="fixed",
+#         left=20,
+#         bottom=0,
+#         margin=px(0, 0, 0, 0),
+#         width=percent(90),
+#         color="white",
+#         text_align="center",
+#         height="auto",
+#         opacity=0.6
+#     )
+
+#     style_hr = styles(
+#         display="block",
+#         margin=px(0, 0, 10,0),
+#         border_style="inset",
+#         border_width=px(1.5)
+#     )
+
+#     body = p()
+#     foot = div(
+#         style=style_div
+#     )(
+#         hr(
+#             style=style_hr
+#         ),
+#         body
+#     )
+
+#     st.markdown(style, unsafe_allow_html=True)
+
+#     for arg in args:
+#         if isinstance(arg, str):
+#             body(arg)
+
+#         elif isinstance(arg, HtmlElement):
+#             body(arg)
+
+#     st.markdown(str(foot), unsafe_allow_html=True)
+
+ 
+# def footer():
+#     myargs = [
+#         "Made by Madhav & Meghana"
+#     ]
+    
+#     layout(*myargs)
 
 if __name__ == '__main__':
 	load = DataFrame_Loader()
 	dataframe = EDA_Dataframe_Analysis()
 	info = Attribute_Information()
 	main()
+	# footer()
 
