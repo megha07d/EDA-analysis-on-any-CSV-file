@@ -54,7 +54,7 @@ class EDA_Dataframe_Analysis():
 		return x.hist()
 	
 	def show_scatterplt(self,a,x,y):
-		return px.scatter(a, x=x, y=y)
+		return px.scatter(x=x, y=y)
 
 	def show_bar(self,a,x,y):
 		return px.histogram(a, x=x, y=y)
@@ -352,8 +352,6 @@ def main():
 			Scatter11 = st.selectbox("Select Column 1 For Bar Plot ",Scatter1)
 			Scatter22 = st.selectbox("Select Column 2 For Bar Plot ",Scatter2)
 			st.write(dataframe.show_bar(df,Scatter11,Scatter22))
-
-
 		
 		listy4 = ['Select','Heatmap']
 		option4 = st.sidebar.selectbox('Multivariate Analysis',listy4)
@@ -363,81 +361,18 @@ def main():
 			st.write(dataframe.show_heatmp(df.corr()))
 			st.pyplot()
    
-		if(option1 != listy1[0] or option2 != listy2[0] or option3 != listy3[0] or option4 != listy4[0] or option5 != listy5[0]):
-			success_txt.empty()
+		# if(option1 != listy1[0] or option2 != listy2[0] or option3 != listy3[0] or option4 != listy4[0] or option5 != listy5[0]):
+		# 	success_txt.empty()
    
-		if(option1 != listy1[0]):
-			st.empty() 
-   
-		st.sidebar.download_button( 
-                             		label="Download Complete Report",
-									data=df.to_csv(),
-									file_name='CSV_Report.pdf',
-									mime='text/pdf'
-								  )
-
-# def layout(*args):
-
-#     style = """
-#     <style>
-#       # MainMenu {visibility: hidden;}
-#       footer {visibility: hidden;}
-#      .stApp { bottom: 30px; }
-#     </style>
-#     """
-
-#     style_div = styles(
-#         position="fixed",
-#         left=20,
-#         bottom=0,
-#         margin=px(0, 0, 0, 0),
-#         width=percent(90),
-#         color="white",
-#         text_align="center",
-#         height="auto",
-#         opacity=0.6
-#     )
-
-#     style_hr = styles(
-#         display="block",
-#         margin=px(0, 0, 10,0),
-#         border_style="inset",
-#         border_width=px(1.5)
-#     )
-
-#     body = p()
-#     foot = div(
-#         style=style_div
-#     )(
-#         hr(
-#             style=style_hr
-#         ),
-#         body
-#     )
-
-#     st.markdown(style, unsafe_allow_html=True)
-
-#     for arg in args:
-#         if isinstance(arg, str):
-#             body(arg)
-
-#         elif isinstance(arg, HtmlElement):
-#             body(arg)
-
-#     st.markdown(str(foot), unsafe_allow_html=True)
-
- 
-# def footer():
-#     myargs = [
-#         "Made by Madhav & Meghana"
-#     ]
-    
-#     layout(*myargs)
+		# st.sidebar.download_button( 
+        #                      		label="Download Complete Report",
+		# 							data=df.to_csv(),
+		# 							file_name='CSV_Report.pdf',
+		# 							mime='text/pdf'
+		# 						  )
 
 if __name__ == '__main__':
 	load = DataFrame_Loader()
 	dataframe = EDA_Dataframe_Analysis()
 	info = Attribute_Information()
 	main()
-	# footer()
-
